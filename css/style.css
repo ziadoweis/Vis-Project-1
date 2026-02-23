@@ -78,8 +78,35 @@ svg{
   stroke: #9ca3af;
 }
 
-/* Axis labels (we use class="label" in the JS classes) */
 .label{
   font-size: 12px;
   fill: #374151;
+}
+
+
+.map-grid{
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 14px;
+}
+
+.map-card{
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 10px;
+  background: #fff;
+}
+
+.map-title{
+  margin: 0 0 8px 0;
+  font-size: 14px;
+  color: var(--muted);
+  font-weight: 600;
+}
+
+/* On smaller screens, stack maps */
+@media (max-width: 900px){
+  .map-grid{
+    grid-template-columns: 1fr;
+  }
 }
