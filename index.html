@@ -1,18 +1,46 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-    <title>D3 Project Starter Template</title>
-    <meta charset="UTF-8">
-    <link rel="icon" href="data:;base64,iVBORwOKGO=" />
-    <link rel="stylesheet" href="css/style.css">
-</head>
-<body>    
-    <!-- Add HTML content, SVG drawing area, ... -->
-    
-    <!-- D3 bundle -->
-    <script src="js/d3.v6.min.js"></script>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>How Do CO2 Emissions Affect Life Expectancy</title>
+  <link rel="stylesheet" href="styles.css" />
 
-    <!-- Our JS code -->
-    <script src="js/main.js"></script>
+  <script src="https://d3js.org/d3.v6.min.js"></script>
+</head>
+
+<body>
+  <header class="header">
+    <h1>CO2 Emissions per Capita vs. Life Expectancy</h1>
+
+    <p class="meta">
+      Dashboard by Ziad Oweis<br>Data Sourced From Our World in Data (<a href="https://ourworldindata.org" target="_blank" rel="noopener noreferrer">https://ourworldindata.org</a>)<br>Data Files: data/country_co2_life_filtered.csv<br>Units: CO2 (tons/person), Life Expectancy (years)
+    </p>
+
+    <p class="meta" id="dataset-summary">Loading…</p>
+  </header>
+
+  <main class="grid">
+    <section class="card">
+      <h2>Visualization 1 - CO2 Emissions per Capita Distribution</h2>
+      <div id="hist-co2"></div>
+    </section>
+
+    <section class="card">
+      <h2>Visualization 2 - Life Expectancy Distribution</h2>
+      <div id="hist-life"></div>
+    </section>
+
+    <section class="card wide">
+      <h2>Visualization 3 - CO2 vs Life Expectancy (all countries)</h2>
+      <div id="scatter"></div>
+    </section>
+  </main>
+
+  <script src="js/Histogram.js"></script>
+  <script src="js/Scatterplot.js"></script>
+
+  <script src="js/main.js"></script>
+
 </body>
 </html>
