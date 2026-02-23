@@ -1,0 +1,69 @@
+{
+  "chart": {
+    "title": "Fossil fuel consumption",
+    "subtitle": "Measured in [terawatt-hours](#dod:watt-hours).",
+    "citation": "Energy Institute - Statistical Review of World Energy (2025)",
+    "originalChartUrl": "https://ourworldindata.org/grapher/fossil-fuel-consumption-by-type?v=1&csvType=full&useColumnShortNames=false",
+    "selection": [
+      "World"
+    ]
+  },
+  "columns": {
+    "Oil consumption - TWh": {
+      "titleShort": "Oil consumption",
+      "titleLong": "Oil consumption",
+      "descriptionKey": [
+        "Includes inland demand plus international aviation and marine bunkers and refinery fuel and loss. Consumption of biogasoline (such as ethanol) and biodiesel are excluded while derivatives of coal and natural gas are included. Differences between the world consumption figures and world production statistics are accounted for by stock changes, consumption of non-petroleum additives and substitute fuels and unavoidable disparities in the definition, measurement or conversion of oil supply and demand data."
+      ],
+      "shortUnit": "TWh",
+      "unit": "terawatt-hours",
+      "timespan": "1965-2024",
+      "type": "Numeric",
+      "owidVariableId": 1077624,
+      "shortName": "oil_consumption_twh",
+      "lastUpdated": "2025-06-27",
+      "nextUpdate": "2026-06-27",
+      "citationShort": "Energy Institute - Statistical Review of World Energy (2025) – with major processing by Our World in Data",
+      "citationLong": "Energy Institute - Statistical Review of World Energy (2025) – with major processing by Our World in Data. “Oil consumption” [dataset]. Energy Institute, “Statistical Review of World Energy” [original data].",
+      "fullMetadata": "https://api.ourworldindata.org/v1/indicators/1077624.metadata.json"
+    },
+    "Gas consumption - TWh": {
+      "titleShort": "Gas consumption",
+      "titleLong": "Gas consumption",
+      "descriptionKey": [
+        "Excludes natural gas converted to liquid fuels but includes derivatives of coal as well as natural gas consumed in Gas-to-Liquids transformation. The difference between the world consumption figures and the world production statistics is due to variations in stocks at storage facilities and liquefaction plants, together with unavoidable disparities in the definition, measurement or conversion of gas supply and demand data."
+      ],
+      "shortUnit": "TWh",
+      "unit": "terawatt-hours",
+      "timespan": "1965-2024",
+      "type": "Numeric",
+      "owidVariableId": 1077570,
+      "shortName": "gas_consumption_twh",
+      "lastUpdated": "2025-06-27",
+      "nextUpdate": "2026-06-27",
+      "citationShort": "Energy Institute - Statistical Review of World Energy (2025) – with major processing by Our World in Data",
+      "citationLong": "Energy Institute - Statistical Review of World Energy (2025) – with major processing by Our World in Data. “Gas consumption” [dataset]. Energy Institute, “Statistical Review of World Energy” [original data].",
+      "fullMetadata": "https://api.ourworldindata.org/v1/indicators/1077570.metadata.json"
+    },
+    "Coal consumption - TWh": {
+      "titleShort": "Coal consumption",
+      "titleLong": "Coal consumption",
+      "descriptionKey": [
+        "Includes commercial solid fuels only, i.e. bituminous coal and anthracite (hard coal), and lignite and brown (sub-bituminous) coal, and other commercial solid fuels. Excludes coal converted to liquid or gaseous fuels, but includes coal consumed in transformation processes. Differences between the consumption figures and the world production statistics are accounted for by stock changes, and unavoidable disparities in the definition, measurement or conversion of coal supply and demand data."
+      ],
+      "shortUnit": "TWh",
+      "unit": "terawatt-hours",
+      "timespan": "1965-2024",
+      "type": "Numeric",
+      "owidVariableId": 1077523,
+      "shortName": "coal_consumption_twh",
+      "lastUpdated": "2025-06-27",
+      "nextUpdate": "2026-06-27",
+      "citationShort": "Energy Institute - Statistical Review of World Energy (2025) – with major processing by Our World in Data",
+      "citationLong": "Energy Institute - Statistical Review of World Energy (2025) – with major processing by Our World in Data. “Coal consumption” [dataset]. Energy Institute, “Statistical Review of World Energy” [original data].",
+      "fullMetadata": "https://api.ourworldindata.org/v1/indicators/1077523.metadata.json"
+    }
+  },
+  "dateDownloaded": "2026-02-23",
+  "activeFilters": {}
+}
