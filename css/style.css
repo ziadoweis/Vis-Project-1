@@ -6,6 +6,9 @@
   --border: #e5e7eb;
 }
 
+/* -------------------------
+   Global defaults
+-------------------------- */
 *{
   box-sizing: border-box;
 }
@@ -17,9 +20,13 @@ body{
   color: var(--text);
 }
 
-/* Header */
+/* -------------------------
+   Header
+-------------------------- */
 .header{
   padding: 20px 24px 8px 24px;
+  max-width: 1200px;
+  margin: 0 auto;
 }
 
 .header h1{
@@ -33,16 +40,73 @@ body{
   font-size: 14px;
 }
 
-/* Grid layout: 2 columns, then wide scatterplot */
+.meta a{
+  color: #2563eb;
+  text-decoration: none;
+}
+
+.meta a:hover{
+  text-decoration: underline;
+}
+
+/* -------------------------
+   Controls (Level 3)
+-------------------------- */
+.controls{
+  margin-top: 12px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 14px;
+  align-items: flex-end;
+}
+
+.control{
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.control label{
+  font-size: 13px;
+  color: var(--muted);
+}
+
+.control select{
+  min-width: 260px;
+  padding: 7px 10px;
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  background: white;
+  font-size: 14px;
+}
+
+.control select:focus{
+  outline: none;
+  border-color: #2563eb;
+}
+
+.hint{
+  margin: 0;
+  color: var(--muted);
+  font-size: 13px;
+}
+
+/* -------------------------
+   Main grid layout
+-------------------------- */
 .grid{
   padding: 12px 24px 24px 24px;
+  max-width: 1200px;
+  margin: 0 auto;
+
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: 14px;
-  max-width: 1200px;
 }
 
-/* Cards */
+/* -------------------------
+   Cards
+-------------------------- */
 .card{
   background: var(--card);
   border: 1px solid var(--border);
@@ -53,21 +117,26 @@ body{
 .card h2{
   margin: 0 0 10px 0;
   font-size: 16px;
+  font-weight: 600;
 }
 
-/* Make scatterplot span both columns */
+/* Span full width */
 .wide{
   grid-column: 1 / span 2;
 }
 
-/* SVG defaults */
+/* -------------------------
+   SVG defaults
+-------------------------- */
 svg{
   width: 100%;
   height: auto;
   display: block;
 }
 
-/* Axes styling */
+/* -------------------------
+   Axes & labels
+-------------------------- */
 .axis text{
   font-size: 11px;
   fill: #374151;
@@ -83,7 +152,9 @@ svg{
   fill: #374151;
 }
 
-
+/* -------------------------
+   Maps (Level 2 & 3)
+-------------------------- */
 .map-grid{
   display: grid;
   grid-template-columns: 1fr 1fr;
@@ -94,7 +165,7 @@ svg{
   border: 1px solid var(--border);
   border-radius: 10px;
   padding: 10px;
-  background: #fff;
+  background: #ffffff;
 }
 
 .map-title{
@@ -104,9 +175,23 @@ svg{
   font-weight: 600;
 }
 
-/* On smaller screens, stack maps */
+/* -------------------------
+   Responsive behavior
+-------------------------- */
 @media (max-width: 900px){
+  .grid{
+    grid-template-columns: 1fr;
+  }
+
+  .wide{
+    grid-column: 1;
+  }
+
   .map-grid{
     grid-template-columns: 1fr;
+  }
+
+  .control select{
+    min-width: 200px;
   }
 }

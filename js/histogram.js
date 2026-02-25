@@ -1,14 +1,14 @@
 class Histogram {
   constructor(_config, _data) {
     this.config = {
-      parentElement: _config.parentElement,         // selector like "#hist-co2"
+      parentElement: _config.parentElement,         
       containerWidth: _config.containerWidth || 520,
       containerHeight: _config.containerHeight || 280,
       margin: _config.margin || { top: 10, right: 18, bottom: 55, left: 60 },
       xLabel: _config.xLabel || "",
       yLabel: _config.yLabel || "Count",
       bins: _config.bins || 25,
-      valueAccessor: _config.valueAccessor          // function like d => d.co2
+      valueAccessor: _config.valueAccessor          
     };
 
     this.data = _data;
@@ -75,22 +75,31 @@ class Histogram {
   updateVis() {
     let vis = this;
 
-    // 1) Extract values we are histogramming
+    // Extract values we are histogramming
     vis.values = vis.data
       .map(vis.config.valueAccessor)
       .filter(v => Number.isFinite(v));
 
-    // 2) Update x domain based on data values
+    // If no valid values, avoid crashing
+    if (vis.values.length === 0) {
+      vis.bins = [];
+      vis.xScale.domain([0, 1]);
+      vis.yScale.domain([0, 1]);
+      vis.renderVis();
+      return;
+    }
+
+    // Update x domain based on data values
     vis.xScale.domain(d3.extent(vis.values)).nice();
 
-    // 3) Build bins (each bin has x0, x1, and an array of values)
+    // Build bins (each bin has x0, x1, and an array of values)
     vis.binGenerator = d3.bin()
       .domain(vis.xScale.domain())
       .thresholds(vis.config.bins);
 
     vis.bins = vis.binGenerator(vis.values);
 
-    // 4) Update y domain based on bin counts
+    // Update y domain based on bin counts
     vis.yScale.domain([0, d3.max(vis.bins, b => b.length) || 0]).nice();
 
     vis.renderVis();
@@ -99,7 +108,7 @@ class Histogram {
   renderVis() {
     let vis = this;
 
-    // --- Bars (data join on bins) ---
+    // Bars (data join on bins)
     vis.bars = vis.barsG.selectAll("rect")
       .data(vis.bins);
 
@@ -114,8 +123,12 @@ class Histogram {
 
     vis.bars.exit().remove();
 
-    // --- Axes ---
+    // Axes
     vis.xAxisG.call(vis.xAxis);
     vis.yAxisG.call(vis.yAxis);
+
+    // Labels
+    vis.xLabel.text(vis.config.xLabel);
+    vis.yLabel.text(vis.config.yLabel);
   }
 }

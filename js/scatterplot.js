@@ -7,8 +7,8 @@ class Scatterplot {
       margin: _config.margin || { top: 10, right: 18, bottom: 60, left: 70 },
       xLabel: _config.xLabel || "",
       yLabel: _config.yLabel || "",
-      xAccessor: _config.xAccessor,  // e.g., d => d.co2
-      yAccessor: _config.yAccessor   // e.g., d => d.life
+      xAccessor: _config.xAccessor, 
+      yAccessor: _config.yAccessor  
     };
 
     this.data = _data;
@@ -47,15 +47,15 @@ class Scatterplot {
     vis.pointsG = vis.chart.append("g")
       .attr("class", "points");
 
-    // Labels
-    vis.chart.append("text")
+    // Labels (store references so we can update them later)
+    vis.xLabel = vis.chart.append("text")
       .attr("class", "label x-label")
       .attr("x", vis.width / 2)
       .attr("y", vis.height + 48)
       .attr("text-anchor", "middle")
       .text(vis.config.xLabel);
 
-    vis.chart.append("text")
+    vis.yLabel = vis.chart.append("text")
       .attr("class", "label y-label")
       .attr("transform", "rotate(-90)")
       .attr("x", -vis.height / 2)
@@ -74,6 +74,14 @@ class Scatterplot {
       Number.isFinite(vis.config.xAccessor(d)) &&
       Number.isFinite(vis.config.yAccessor(d))
     );
+
+    // Avoid crashing if no valid data
+    if (vis.filteredData.length === 0) {
+      vis.xScale.domain([0, 1]);
+      vis.yScale.domain([0, 1]);
+      vis.renderVis();
+      return;
+    }
 
     // Update domains
     vis.xScale.domain(d3.extent(vis.filteredData, vis.config.xAccessor)).nice();
@@ -105,5 +113,9 @@ class Scatterplot {
     // Axes
     vis.xAxisG.call(vis.xAxis);
     vis.yAxisG.call(vis.yAxis);
+
+    // Labels 
+    vis.xLabel.text(vis.config.xLabel);
+    vis.yLabel.text(vis.config.yLabel);
   }
 }

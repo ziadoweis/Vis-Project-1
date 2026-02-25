@@ -15,40 +15,58 @@
 
     <p class="meta">
       Dashboard by Ziad Oweis<br>
-      Data Sourced From <a href="https://ourworldindata.org" target="_blank" rel="noopener noreferrer">Our World in Data</a> and <a href="https://vizhub.healthdata.org/gbd-results/" target="_blank" rel="noopener noreferrer">IHME GBD Results</a><br>
-      Data Files: data/country_co2_life_filtered.csv<br>
+      Data Sourced From <a href="https://ourworldindata.org" target="_blank" rel="noopener noreferrer">Our World in Data</a><br>
+      Data File: data/country_co2_life_filtered.csv<br>
       Units: CO2 (tons/person), Life Expectancy (years)
     </p>
 
     <p class="meta" id="dataset-summary">Loading…</p>
+
+    <div class="controls">
+      <div class="control">
+        <label for="varA">Variable A (left):</label>
+        <select id="varA"></select>
+      </div>
+
+      <div class="control">
+        <label for="varB">Variable B (right):</label>
+        <select id="varB"></select>
+      </div>
+
+      <p class="hint">
+        Pick two indicators to compare. Histograms, scatterplot, and maps update automatically.
+      </p>
+
+      <!-- NEW: shows how many countries have valid values -->
+      <p class="hint" id="valid-summary">Valid data: loading…</p>
+    </div>
   </header>
 
   <main class="grid">
     <section class="card">
-      <h2>Visualization 1 - CO2 Emissions per Capita Distribution</h2>
+      <h2 id="title-hist-a">Visualization 1 - Distribution (Variable A)</h2>
       <div id="hist-co2"></div>
     </section>
 
     <section class="card">
-      <h2>Visualization 2 - Life Expectancy Distribution</h2>
+      <h2 id="title-hist-b">Visualization 2 - Distribution (Variable B)</h2>
       <div id="hist-life"></div>
     </section>
 
     <section class="card wide">
-      <h2>Visualization 3 - CO2 vs Life Expectancy (all countries)</h2>
+      <h2 id="title-scatter">Visualization 3 - Variable A vs Variable B (all countries)</h2>
       <div id="scatter"></div>
     </section>
 
-    
     <section class="card wide">
       <h2>Visualization 4 & 5 - Spatial distribution (choropleth maps)</h2>
       <div class="map-grid">
         <div class="map-card">
-          <h3 class="map-title">CO2 emissions per capita (tons/person)</h3>
+          <h3 class="map-title" id="title-map-a">Map (Variable A)</h3>
           <div id="map-co2"></div>
         </div>
         <div class="map-card">
-          <h3 class="map-title">Life expectancy (years)</h3>
+          <h3 class="map-title" id="title-map-b">Map (Variable B)</h3>
           <div id="map-life"></div>
         </div>
       </div>
@@ -58,7 +76,7 @@
   <script src="js/histogram.js"></script>
   <script src="js/scatterplot.js"></script>
   <script src="js/choroplethmap.js"></script>
-
+  
   <script src="js/main.js"></script>
 </body>
 </html>

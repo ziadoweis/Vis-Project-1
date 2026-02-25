@@ -8,8 +8,8 @@ class ChoroplethMap {
       margin: _config.margin || { top: 10, right: 10, bottom: 10, left: 10 },
 
       // Join key and value accessor
-      keyAccessor: _config.keyAccessor,       // e.g., d => d.iso3
-      valueAccessor: _config.valueAccessor,   // e.g., d => d.co2
+      keyAccessor: _config.keyAccessor,       
+      valueAccessor: _config.valueAccessor,  
 
       // Color interpolator (sequential)
       colorInterpolator: _config.colorInterpolator || d3.interpolateBlues,
@@ -19,8 +19,8 @@ class ChoroplethMap {
     };
 
     this.geoData = _geoData; // GeoJSON
-    this.data = _data;       
-    
+    this.data = _data;
+
     this.initVis();
   }
 
@@ -47,9 +47,6 @@ class ChoroplethMap {
     // Fit the world to the available space
     vis.projection.fitSize([vis.width, vis.height], vis.geoData);
 
-    // Color scale (domain set in updateVis)
-    vis.colorScale = d3.scaleSequential(vis.config.colorInterpolator);
-
     vis.updateVis();
   }
 
@@ -65,8 +62,9 @@ class ChoroplethMap {
     const values = Array.from(vis.valueById.values()).filter(v => Number.isFinite(v));
     vis.colorDomain = d3.extent(values);
 
-    // Set color scale domain
-    vis.colorScale.domain(vis.colorDomain);
+    // rebuild the scale each update so changes to colorInterpolator take effect
+    vis.colorScale = d3.scaleSequential(vis.config.colorInterpolator)
+      .domain(vis.colorDomain);
 
     vis.renderVis();
   }
@@ -86,7 +84,7 @@ class ChoroplethMap {
       .attr("stroke", "#999")
       .attr("stroke-width", 0.4)
       .attr("fill", d => {
-        // holtzy world.geojson uses d.id as the join key (ISO3) :contentReference[oaicite:1]{index=1}
+        // holtzy world.geojson uses d.id as the join key (ISO3)
         const v = vis.valueById.get(d.id);
         return Number.isFinite(v) ? vis.colorScale(v) : vis.config.missingColor;
       });
