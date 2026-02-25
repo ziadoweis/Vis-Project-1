@@ -218,3 +218,12 @@ svg{
   .dashboard{ grid-template-columns: 1fr; grid-template-rows: auto; }
   #card-scatter{ grid-column: 1; }
 }
+
+/* Make D3 brushes look clean */
+.brush .selection {
+  fill: rgba(37, 99, 235, 0.18);
+  stroke: rgba(37, 99, 235, 0.55);
+}
+.brush .handle {
+  fill: rgba(37, 99, 235, 0.55);
+}

@@ -2,16 +2,19 @@ class Scatterplot {
   constructor(_config, _data) {
     this.config = {
       parentElement: _config.parentElement,
-      containerWidth: _config.containerWidth || 1100,
-      containerHeight: _config.containerHeight || 420,
+      containerWidth: _config.containerWidth || 1140,
+      containerHeight: _config.containerHeight || 280,
       margin: _config.margin || { top: 10, right: 18, bottom: 55, left: 70 },
       xLabel: _config.xLabel || "",
       yLabel: _config.yLabel || "",
       xAccessor: _config.xAccessor,
-      yAccessor: _config.yAccessor
+      yAccessor: _config.yAccessor,
+      onBrush: _config.onBrush || null
     };
 
     this.data = _data;
+    this.selectionSet = null;
+
     this.tooltip = d3.select("#tooltip");
 
     this.initVis();
@@ -44,8 +47,10 @@ class Scatterplot {
     vis.yAxisG = vis.chart.append("g")
       .attr("class", "axis y-axis");
 
-    vis.pointsG = vis.chart.append("g")
-      .attr("class", "points");
+    vis.pointsG = vis.chart.append("g").attr("class", "points");
+
+    // brush layer
+    vis.brushG = vis.chart.append("g").attr("class", "brush");
 
     vis.xLabel = vis.chart.append("text")
       .attr("class", "label x-label")
@@ -62,7 +67,40 @@ class Scatterplot {
       .attr("text-anchor", "middle")
       .text(vis.config.yLabel);
 
+    // init brush
+    vis.brush = d3.brush()
+      .extent([[0, 0], [vis.width, vis.height]])
+      .on("brush end", (event) => {
+        if (!vis.config.onBrush) return;
+
+        if (!event.selection) {
+          vis.config.onBrush(null);
+          return;
+        }
+
+        const [[x0, y0], [x1, y1]] = event.selection;
+
+        const xmin = vis.xScale.invert(Math.min(x0, x1));
+        const xmax = vis.xScale.invert(Math.max(x0, x1));
+        const ymin = vis.yScale.invert(Math.max(y0, y1)); // y invert!
+        const ymax = vis.yScale.invert(Math.min(y0, y1));
+
+        vis.config.onBrush({ x: [xmin, xmax], y: [ymin, ymax] });
+      });
+
+    vis.brushG.call(vis.brush);
+
     vis.updateVis();
+  }
+
+  clearBrush() {
+    let vis = this;
+    vis.brushG.call(vis.brush.move, null);
+  }
+
+  setSelection(selectionSet) {
+    this.selectionSet = selectionSet;
+    this.renderVis();
   }
 
   updateVis() {
@@ -80,6 +118,7 @@ class Scatterplot {
       return;
     }
 
+    // Scales fixed to full-data extents (NOT selection)
     vis.xScale.domain(d3.extent(vis.filteredData, vis.config.xAccessor)).nice();
     vis.yScale.domain(d3.extent(vis.filteredData, vis.config.yAccessor)).nice();
 
@@ -91,24 +130,27 @@ class Scatterplot {
 
     const fmt = d3.format(",.2f");
 
-    vis.points = vis.pointsG.selectAll("circle")
+    const points = vis.pointsG.selectAll("circle")
       .data(vis.filteredData, d => d.iso3);
 
-    vis.points.enter()
+    points.enter()
       .append("circle")
-      .attr("r", 3)
-      .attr("fill", "rgba(52,211,153,0.72)")
-      .attr("stroke", "rgba(255,255,255,0.22)")
+      .attr("r", 3.2)
+      .attr("fill", "rgba(16,185,129,0.75)")
+      .attr("stroke", "rgba(0,0,0,0.10)")
       .attr("stroke-width", 1)
-      .merge(vis.points)
+      .merge(points)
       .attr("cx", d => vis.xScale(vis.config.xAccessor(d)))
       .attr("cy", d => vis.yScale(vis.config.yAccessor(d)))
+      .attr("opacity", d => {
+        if (!vis.selectionSet) return 0.85;
+        return vis.selectionSet.has(d.iso3) ? 0.95 : 0.05; // practically "only selected"
+      })
+      .attr("r", d => {
+        if (!vis.selectionSet) return 3.2;
+        return vis.selectionSet.has(d.iso3) ? 4.2 : 2.5;
+      })
       .on("mouseenter", (event, d) => {
-        d3.select(event.currentTarget)
-          .attr("r", 5)
-          .attr("fill", "rgba(52,211,153,0.95)")
-          .attr("stroke", "rgba(255,255,255,0.45)");
-
         vis.tooltip
           .style("opacity", 1)
           .html(`
@@ -123,16 +165,9 @@ class Scatterplot {
           .style("left", (event.clientX + 14) + "px")
           .style("top", (event.clientY + 14) + "px");
       })
-      .on("mouseleave", (event) => {
-        d3.select(event.currentTarget)
-          .attr("r", 3)
-          .attr("fill", "rgba(52,211,153,0.72)")
-          .attr("stroke", "rgba(255,255,255,0.22)");
+      .on("mouseleave", () => vis.tooltip.style("opacity", 0));
 
-        vis.tooltip.style("opacity", 0);
-      });
-
-    vis.points.exit().remove();
+    points.exit().remove();
 
     vis.xAxisG.call(vis.xAxis);
     vis.yAxisG.call(vis.yAxis);
