@@ -4,14 +4,15 @@ class Scatterplot {
       parentElement: _config.parentElement,
       containerWidth: _config.containerWidth || 1100,
       containerHeight: _config.containerHeight || 420,
-      margin: _config.margin || { top: 10, right: 18, bottom: 60, left: 70 },
+      margin: _config.margin || { top: 10, right: 18, bottom: 55, left: 70 },
       xLabel: _config.xLabel || "",
       yLabel: _config.yLabel || "",
-      xAccessor: _config.xAccessor, 
-      yAccessor: _config.yAccessor  
+      xAccessor: _config.xAccessor,
+      yAccessor: _config.yAccessor
     };
 
     this.data = _data;
+    this.tooltip = d3.select("#tooltip");
 
     this.initVis();
   }
@@ -43,15 +44,13 @@ class Scatterplot {
     vis.yAxisG = vis.chart.append("g")
       .attr("class", "axis y-axis");
 
-    // Group for points
     vis.pointsG = vis.chart.append("g")
       .attr("class", "points");
 
-    // Labels (store references so we can update them later)
     vis.xLabel = vis.chart.append("text")
       .attr("class", "label x-label")
       .attr("x", vis.width / 2)
-      .attr("y", vis.height + 48)
+      .attr("y", vis.height + 44)
       .attr("text-anchor", "middle")
       .text(vis.config.xLabel);
 
@@ -69,13 +68,11 @@ class Scatterplot {
   updateVis() {
     let vis = this;
 
-    // Filter out invalid points
     vis.filteredData = vis.data.filter(d =>
       Number.isFinite(vis.config.xAccessor(d)) &&
       Number.isFinite(vis.config.yAccessor(d))
     );
 
-    // Avoid crashing if no valid data
     if (vis.filteredData.length === 0) {
       vis.xScale.domain([0, 1]);
       vis.yScale.domain([0, 1]);
@@ -83,7 +80,6 @@ class Scatterplot {
       return;
     }
 
-    // Update domains
     vis.xScale.domain(d3.extent(vis.filteredData, vis.config.xAccessor)).nice();
     vis.yScale.domain(d3.extent(vis.filteredData, vis.config.yAccessor)).nice();
 
@@ -93,28 +89,54 @@ class Scatterplot {
   renderVis() {
     let vis = this;
 
-    // Points data join
+    const fmt = d3.format(",.2f");
+
     vis.points = vis.pointsG.selectAll("circle")
-      .data(vis.filteredData);
+      .data(vis.filteredData, d => d.iso3);
 
     vis.points.enter()
       .append("circle")
+      .attr("r", 3)
+      .attr("fill", "rgba(52,211,153,0.72)")
+      .attr("stroke", "rgba(255,255,255,0.22)")
+      .attr("stroke-width", 1)
       .merge(vis.points)
       .attr("cx", d => vis.xScale(vis.config.xAccessor(d)))
       .attr("cy", d => vis.yScale(vis.config.yAccessor(d)))
-      .attr("r", 2.6)
-      .attr("fill", "#4682B4")
-      .attr("stroke", "black")
-      .attr("stroke-opacity", 0.5)
-      .attr("fill-opacity", 0.75);
+      .on("mouseenter", (event, d) => {
+        d3.select(event.currentTarget)
+          .attr("r", 5)
+          .attr("fill", "rgba(52,211,153,0.95)")
+          .attr("stroke", "rgba(255,255,255,0.45)");
+
+        vis.tooltip
+          .style("opacity", 1)
+          .html(`
+            <div class="tt-title">${d.country}</div>
+            <div class="tt-row"><b>X:</b> ${fmt(vis.config.xAccessor(d))}</div>
+            <div class="tt-row"><b>Y:</b> ${fmt(vis.config.yAccessor(d))}</div>
+            <div class="tt-muted">ISO3: ${d.iso3} • Year: ${d.year}</div>
+          `);
+      })
+      .on("mousemove", (event) => {
+        vis.tooltip
+          .style("left", (event.clientX + 14) + "px")
+          .style("top", (event.clientY + 14) + "px");
+      })
+      .on("mouseleave", (event) => {
+        d3.select(event.currentTarget)
+          .attr("r", 3)
+          .attr("fill", "rgba(52,211,153,0.72)")
+          .attr("stroke", "rgba(255,255,255,0.22)");
+
+        vis.tooltip.style("opacity", 0);
+      });
 
     vis.points.exit().remove();
 
-    // Axes
     vis.xAxisG.call(vis.xAxis);
     vis.yAxisG.call(vis.yAxis);
 
-    // Labels 
     vis.xLabel.text(vis.config.xLabel);
     vis.yLabel.text(vis.config.yLabel);
   }

@@ -1,197 +1,220 @@
 :root{
-  --bg: #f7f7f8;
+  --bg: #f6f7fb;
   --card: #ffffff;
   --text: #111827;
-  --muted: #4b5563;
+  --muted: #6b7280;
   --border: #e5e7eb;
+  --shadow: 0 10px 26px rgba(17, 24, 39, 0.08);
+  --radius: 14px;
 }
 
-/* -------------------------
-   Global defaults
--------------------------- */
-*{
-  box-sizing: border-box;
+*{ box-sizing: border-box; }
+
+html, body{
+  height: 100%;
 }
 
 body{
   margin: 0;
-  font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+  font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
   background: var(--bg);
   color: var(--text);
+  overflow: hidden; /* one-screen dashboard */
 }
 
-/* -------------------------
-   Header
--------------------------- */
-.header{
-  padding: 20px 24px 8px 24px;
+/* ---------- Page layout: header + dashboard ---------- */
+.page{
   max-width: 1200px;
   margin: 0 auto;
+  padding: 12px 16px 14px 16px;
+
+  height: 100vh;
+  display: grid;
+  grid-template-rows: 120px 1fr; /* header fixed, dashboard fills */
+  gap: 12px;
 }
 
-.header h1{
-  margin: 0 0 6px 0;
-  font-size: 24px;
+/* ---------- Shared panel styles ---------- */
+.panel{
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  padding: 12px;
+
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
 }
 
-.meta{
-  margin: 0 0 6px 0;
-  color: var(--muted);
+.panel-head{
+  margin-bottom: 6px;
+}
+
+.panel h2{
+  margin: 0;
   font-size: 14px;
+  font-weight: 750;
 }
 
-.meta a{
+/* ---------- Top control panel (compact) ---------- */
+.top-panel{
+  display: grid;
+  grid-template-columns: 1.2fr 1fr;
+  gap: 12px;
+  align-items: center;
+  padding: 14px 16px;
+}
+
+.title{
+  margin: 0;
+  font-size: 20px;
+  font-weight: 850;
+  letter-spacing: 0.2px;
+}
+
+.subtitle{
+  margin: 4px 0 0 0;
+  font-size: 13px;
+  color: var(--muted);
+}
+
+.subtitle a{
   color: #2563eb;
   text-decoration: none;
 }
+.subtitle a:hover{ text-decoration: underline; }
 
-.meta a:hover{
-  text-decoration: underline;
-}
-
-/* -------------------------
-   Controls (Level 3)
--------------------------- */
-.controls{
-  margin-top: 12px;
+.stats{
+  margin-top: 6px;
   display: flex;
   flex-wrap: wrap;
-  gap: 14px;
-  align-items: flex-end;
+  gap: 6px 12px;
+}
+
+.stat{
+  font-size: 13px;
+  color: var(--muted);
+}
+
+.top-right{
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px 12px;
+  justify-items: end;
+  align-items: center;
 }
 
 .control{
+  width: 100%;
+  max-width: 320px;
   display: flex;
   flex-direction: column;
   gap: 6px;
 }
 
 .control label{
-  font-size: 13px;
+  font-size: 12px;
   color: var(--muted);
 }
 
 .control select{
-  min-width: 260px;
-  padding: 7px 10px;
+  padding: 10px 12px;
   border: 1px solid var(--border);
-  border-radius: 10px;
-  background: white;
-  font-size: 14px;
+  border-radius: 12px;
+  background: #fff;
+  font-size: 13px;
+  outline: none;
 }
 
 .control select:focus{
-  outline: none;
   border-color: #2563eb;
+  box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.15);
 }
 
 .hint{
+  grid-column: 1 / span 2;
+  justify-self: end;
   margin: 0;
+  font-size: 12px;
   color: var(--muted);
-  font-size: 13px;
 }
 
-/* -------------------------
-   Main grid layout
--------------------------- */
-.grid{
-  padding: 12px 24px 24px 24px;
-  max-width: 1200px;
-  margin: 0 auto;
-
+/* ---------- Dashboard (2-1-2 layout with fixed row heights) ---------- */
+.dashboard{
+  min-height: 0;
   display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: 14px;
+  gap: 12px;
+
+  /* IMPORTANT: fixed row heights to prevent SVG clipping */
+  grid-template-rows: 240px 280px 240px;
 }
 
-/* -------------------------
-   Cards
--------------------------- */
-.card{
-  background: var(--card);
-  border: 1px solid var(--border);
-  border-radius: 12px;
-  padding: 12px;
-}
-
-.card h2{
-  margin: 0 0 10px 0;
-  font-size: 16px;
-  font-weight: 600;
-}
-
-/* Span full width */
-.wide{
+#card-scatter{
   grid-column: 1 / span 2;
 }
 
-/* -------------------------
-   SVG defaults
--------------------------- */
+/* Visualization container fills remaining card space */
+.viz{
+  flex: 1;
+  min-height: 0;
+}
+
+/* SVG should fill the viz container */
 svg{
   width: 100%;
-  height: auto;
+  height: 100%;
   display: block;
 }
 
-/* -------------------------
-   Axes & labels
--------------------------- */
+/* Axes */
 .axis text{
   font-size: 11px;
   fill: #374151;
 }
-
 .axis path,
 .axis line{
   stroke: #9ca3af;
 }
-
 .label{
   font-size: 12px;
   fill: #374151;
 }
 
-/* -------------------------
-   Maps (Level 2 & 3)
--------------------------- */
-.map-grid{
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 14px;
+/* Tooltip */
+.tooltip{
+  position: fixed;
+  pointer-events: none;
+  padding: 10px 11px;
+  border-radius: 12px;
+  border: 1px solid rgba(0,0,0,0.10);
+  background: rgba(255,255,255,0.96);
+  color: #111827;
+  box-shadow: 0 14px 30px rgba(0,0,0,0.18);
+  font-size: 12px;
+  line-height: 1.25;
+  max-width: 300px;
+  z-index: 1000;
 }
 
-.map-card{
-  border: 1px solid var(--border);
-  border-radius: 10px;
-  padding: 10px;
-  background: #ffffff;
+.tooltip .tt-title{ font-weight: 800; margin-bottom: 4px; }
+.tooltip .tt-row{ color: #111827; }
+.tooltip .tt-muted{ color: #6b7280; }
+
+/* ---------- If screen is too small, allow scroll instead of squishing ---------- */
+@media (max-height: 780px){
+  body{ overflow: auto; }
+  .page{ height: auto; grid-template-rows: auto auto; }
+  .dashboard{ grid-template-rows: auto auto auto; }
 }
 
-.map-title{
-  margin: 0 0 8px 0;
-  font-size: 14px;
-  color: var(--muted);
-  font-weight: 600;
-}
-
-/* -------------------------
-   Responsive behavior
--------------------------- */
-@media (max-width: 900px){
-  .grid{
-    grid-template-columns: 1fr;
-  }
-
-  .wide{
-    grid-column: 1;
-  }
-
-  .map-grid{
-    grid-template-columns: 1fr;
-  }
-
-  .control select{
-    min-width: 200px;
-  }
+@media (max-width: 1100px){
+  body{ overflow: auto; }
+  .page{ height: auto; grid-template-rows: auto auto; }
+  .top-panel{ grid-template-columns: 1fr; }
+  .top-right{ grid-template-columns: 1fr; justify-items: start; }
+  .hint{ grid-column: 1; justify-self: start; }
+  .dashboard{ grid-template-columns: 1fr; grid-template-rows: auto; }
+  #card-scatter{ grid-column: 1; }
 }

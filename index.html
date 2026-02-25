@@ -3,80 +3,94 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
-  <title>How Do CO2 Emissions Affect Life Expectancy</title>
-  <link rel="stylesheet" href="styles.css"/>
+  <title>Country Indicators Explorer</title>
+
+  <link rel="stylesheet" href="css/style.css" />
 
   <script src="https://d3js.org/d3.v6.min.js"></script>
 </head>
 
 <body>
-  <header class="header">
-    <h1>CO2 Emissions per Capita vs. Life Expectancy</h1>
+  <main class="page">
 
-    <p class="meta">
-      Dashboard by Ziad Oweis<br>
-      Data Sourced From <a href="https://ourworldindata.org" target="_blank" rel="noopener noreferrer">Our World in Data</a><br>
-      Data File: data/country_co2_life_filtered.csv<br>
-      Units: CO2 (tons/person), Life Expectancy (years)
-    </p>
+    <!-- Block 1: top control panel -->
+    <section class="panel top-panel">
+      <div class="top-left">
+        <h1 class="title">Country Indicators Explorer</h1>
+        <p class="subtitle">
+          Dashboard by Ziad Oweis • Data:
+          <a href="https://ourworldindata.org" target="_blank" rel="noopener noreferrer">Our World in Data</a>
+        </p>
 
-    <p class="meta" id="dataset-summary">Loading…</p>
-
-    <div class="controls">
-      <div class="control">
-        <label for="varA">Variable A (left):</label>
-        <select id="varA"></select>
-      </div>
-
-      <div class="control">
-        <label for="varB">Variable B (right):</label>
-        <select id="varB"></select>
-      </div>
-
-      <p class="hint">
-        Pick two indicators to compare. Histograms, scatterplot, and maps update automatically.
-      </p>
-
-      <!-- NEW: shows how many countries have valid values -->
-      <p class="hint" id="valid-summary">Valid data: loading…</p>
-    </div>
-  </header>
-
-  <main class="grid">
-    <section class="card">
-      <h2 id="title-hist-a">Visualization 1 - Distribution (Variable A)</h2>
-      <div id="hist-co2"></div>
-    </section>
-
-    <section class="card">
-      <h2 id="title-hist-b">Visualization 2 - Distribution (Variable B)</h2>
-      <div id="hist-life"></div>
-    </section>
-
-    <section class="card wide">
-      <h2 id="title-scatter">Visualization 3 - Variable A vs Variable B (all countries)</h2>
-      <div id="scatter"></div>
-    </section>
-
-    <section class="card wide">
-      <h2>Visualization 4 & 5 - Spatial distribution (choropleth maps)</h2>
-      <div class="map-grid">
-        <div class="map-card">
-          <h3 class="map-title" id="title-map-a">Map (Variable A)</h3>
-          <div id="map-co2"></div>
-        </div>
-        <div class="map-card">
-          <h3 class="map-title" id="title-map-b">Map (Variable B)</h3>
-          <div id="map-life"></div>
+        <div class="stats">
+          <div class="stat" id="dataset-summary">Loading…</div>
+          <div class="stat" id="valid-summary">Valid data: loading…</div>
         </div>
       </div>
+
+      <div class="top-right">
+        <div class="control">
+          <label for="varA">Variable A</label>
+          <select id="varA"></select>
+        </div>
+
+        <div class="control">
+          <label for="varB">Variable B</label>
+          <select id="varB"></select>
+        </div>
+
+        <p class="hint">Hover marks for details. Changing variables updates all views.</p>
+      </div>
+    </section>
+
+    <!-- Blocks 2–5: dashboard -->
+    <section class="dashboard">
+
+      <section class="panel" id="card-hist-a">
+        <div class="panel-head">
+          <h2 id="title-hist-a">Distribution • Variable A</h2>
+        </div>
+        <div id="hist-co2" class="viz"></div>
+      </section>
+
+      <section class="panel" id="card-hist-b">
+        <div class="panel-head">
+          <h2 id="title-hist-b">Distribution • Variable B</h2>
+        </div>
+        <div id="hist-life" class="viz"></div>
+      </section>
+
+      <section class="panel" id="card-scatter">
+        <div class="panel-head">
+          <h2 id="title-scatter">Relationship • Variable A vs Variable B</h2>
+        </div>
+        <div id="scatter" class="viz"></div>
+      </section>
+
+      <section class="panel" id="card-map-a">
+        <div class="panel-head">
+          <h2 id="title-map-a">Map • Variable A</h2>
+        </div>
+        <div id="map-co2" class="viz"></div>
+      </section>
+
+      <section class="panel" id="card-map-b">
+        <div class="panel-head">
+          <h2 id="title-map-b">Map • Variable B</h2>
+        </div>
+        <div id="map-life" class="viz"></div>
+      </section>
+
     </section>
   </main>
+
+  <!-- One global tooltip shared across all charts -->
+  <div id="tooltip" class="tooltip" style="opacity:0;"></div>
 
   <script src="js/histogram.js"></script>
   <script src="js/scatterplot.js"></script>
   <script src="js/choroplethmap.js"></script>
-  
+
   <script src="js/main.js"></script>
 </body>
 </html>
